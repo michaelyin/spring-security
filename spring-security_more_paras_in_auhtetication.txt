@@ -1,0 +1,37 @@
+# to add customization of the form login authentication in Spring boot
+
+org.springframework.security:spring-security-web:3.2.5.RELEASE
+
+Extended class to help form login get extra parameters in the http
+request. 
+
+It solves following issue:
+
+http://stackoverflow.com/questions/16104228/how-implement-spring-security-when-login-page-having-more-field-apart-from-user?lq=1
+http://stackoverflow.com/questions/23336770/spring-security-authentication-with-3-fields-instead-of-just-username-and-passwo?lq=1
+
+1. Add a new token class HttpAuthenticationToken
+
+It has a hashmap to store parameters/values from the http request. 
+
+2. Use the new token class in the UsernamePasswordAuthenticationFilter class which will store all parameter/value pairs in the 
+httpservletrequest.
+
+3. The HttpAuthenticationToken class can be used in your customized authetication provider for your usage.
+
+4. in the command line type: ./gradlew install, it will install the new build 3.2.5release in your local maven repository.
+
+5. to force gradle to pick up the customized spring-security libs, put following in your spring boot build.gradle file:
+
+configurations.all {
+    // check for updates every build
+    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+}
+
+dependencies {
+    compile group: "org.springframework.security", name: "spring-security-web", version: "3.2.5.RELEASE", changing: true
+}
+
+
+It is a hack. But it gets the job done.
+Another way to do it is following the link below. The author proposes a different approach, which I think is awesome.
